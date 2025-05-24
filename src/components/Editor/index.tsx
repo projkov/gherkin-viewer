@@ -1,5 +1,4 @@
 import Editor from '@monaco-editor/react';
-import { Input } from 'antd';
 import { styles } from '../../styles';
 
 export function EditorContainer(props: { setContent: (value: string) => void, content: string }) {
@@ -11,9 +10,8 @@ export function EditorContainer(props: { setContent: (value: string) => void, co
     };
 
     return (
-        <div style={styles.resourceBlockWrapper}>
+        <div style={styles.editorWrapper}>
             <Editor
-                height="85vh"
                 defaultLanguage={"gherkin"}
                 value={content}
                 onChange={onChange}

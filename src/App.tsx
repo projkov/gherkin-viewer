@@ -6,7 +6,6 @@ import { AppContent } from './containers/AppContent';
 const App: React.FC = () => {
     return (
         <AppContainer
-            header={<AppHeader />}
             content={<AppContent />}
         />
     );
