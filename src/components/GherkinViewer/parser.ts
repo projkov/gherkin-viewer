@@ -12,12 +12,19 @@ export function parseGherkin(gherkin: string): GherkinFeature[] {
     let currentBackground: GherkinBackground | null = null;
     let currentExamples: GherkinExampleTable | null = null;
     let inExamples = false;
+    let pendingTags: string[] = [];
 
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const trimmed = line.trim();
 
         if (!trimmed || trimmed.startsWith('#')) continue; // Skip empty lines and comments
+
+        if (trimmed.startsWith('@')) {
+            const tags = trimmed.split(/\s+/).filter(tag => tag.startsWith('@'));
+            pendingTags = pendingTags.concat(tags);
+            continue;
+        }
 
         if (trimmed.startsWith('Feature:')) {
             // Push previous feature if exists
@@ -32,6 +39,11 @@ export function parseGherkin(gherkin: string): GherkinFeature[] {
                 title: trimmed.slice(8).trim(),
                 scenarios: [],
             };
+
+            if (pendingTags.length > 0) {
+                currentFeature.tags = pendingTags;
+                pendingTags = [];
+            }
         }
         else if (trimmed.startsWith('Background:')) {
             if (!currentFeature) {
@@ -54,6 +66,11 @@ export function parseGherkin(gherkin: string): GherkinFeature[] {
                 title: trimmed.split(':')[1].trim(),
                 steps: [],
             };
+
+            if (pendingTags.length > 0) {
+                currentScenario.tags = pendingTags;
+                pendingTags = [];
+            }
             inExamples = false;
         }
         else if (trimmed.startsWith('Examples:')) {

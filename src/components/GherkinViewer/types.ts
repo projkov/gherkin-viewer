@@ -3,6 +3,7 @@ export interface GherkinFeature {
     description?: string[];
     background?: GherkinBackground;
     scenarios: GherkinScenario[];
+    tags?: string[];
 }
 
 export interface GherkinBackground {
@@ -13,6 +14,7 @@ export interface GherkinScenario {
     title: string;
     steps: GherkinStep[];
     examples?: GherkinExampleTable[];
+    tags?: string[];
 }
 
 export interface GherkinStep {
